@@ -15,7 +15,7 @@ require_once($path . 'wp-load.php');
 
  function send_customer_notification($order_id) {
         try {
-            $order_details = new WC_Order($order_id);
+            $order_details = new \WC_Order($order_id);
 
         $message = 'Order Completed successfully. [serial_key]. Retrieve delayed cards at https://resultcheckerpin.com/retrieve-checker/ .Support 0241656373';
         $serial = "";
@@ -50,7 +50,6 @@ require_once($path . 'wp-load.php');
             
             if($api_key == '' || $api_key == '') return;
             if($sms_from == '') $sms_from = 'SMS';
-            
            
             try {
     
