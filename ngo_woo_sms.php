@@ -30,7 +30,7 @@ require_once($path . 'wp-load.php');
         $message = 'Order Completed successfully. [serial_key]. Retrieve delayed cards at https://resultcheckerpin.com/retrieve-checker/ .Support 0241656373';
         $serial = "";
 
-        // $log->add($log_prefix, 'About to get keys');
+        $log->add($log_prefix, 'About to get keys');
 
         // $keys = wcsn_order_get_keys( $order_id );
 
@@ -58,10 +58,10 @@ require_once($path . 'wp-load.php');
 
         if ($serial == "") {
             // let's notify chris
+            $log->add($log_prefix, "No Keys");
             $cust_phone = $order_details->get_billing_phone();
             ngo_send_sms("0241656373", "Dear Admin Check this order $order_id. No keys associated with it. Customer Phone $cust_phone", $api_key, $sms_from);
-
-
+            return ;
         }
        
 
@@ -101,6 +101,8 @@ require_once($path . 'wp-load.php');
             if($sms_from == '') $sms_from = 'SMS';
            
             ngo_send_sms($customer_phone_no, $message, $api_key, $sms_from);
+        } else {
+            $log->add($log_prefix, "No Phone");
         }
         } catch (\Throwable $th) {
             //throw $th;
@@ -123,7 +125,10 @@ require_once($path . 'wp-load.php');
         $query ="?key=".$api_key."&to=$phone&msg=$message.&sender_id=".$sms_from."";
         $final_uri = $baseurl.$query;
         $response = file_get_contents($final_uri);
-        header ("Content-Type:text/xml");       
+        header ("Content-Type:text/xml");   
+        
+        $log->add($log_prefix, "SMS Response");
+        $log->add($log_prefix, $response);   
       
     } catch (Exception $e) {
         $log->add($log_prefix, "SMS API Failed");
