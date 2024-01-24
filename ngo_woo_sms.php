@@ -32,26 +32,9 @@ require_once($path . 'wp-load.php');
 
         $log->add($log_prefix, 'About to get keys');
 
-        // $keys = wcsn_order_get_keys( $order_id );
+    
 
-        // if ( empty( $keys ) ) {
-        //     $log->add($log_prefix, 'No Keys Found');
-		// 	return;
-		// }
-
-        // foreach ( $keys as $key ) {
-        //     $serial =  $key->get_serial_key();
-        // }
-
-        $order_items = $order_details->get_items();
-
-        foreach ($order_items as $item_id=> $item) {
-
-            $product_id = $item->get_product_id();
-
-            $serial = ngo_display_order_item_meta($item_id,$item,$product_id);
-            
-        }
+        $serial = get_serial_associated_with_order($order_id);
 
         $api_key = ngo_woo_get_option("mnotifysms_woocommerce_api_key", 'mnotifysms_setting', '');
         $sms_from = ngo_woo_get_option("mnotifysms_woocommerce_sms_from", 'mnotifysms_setting', '');
