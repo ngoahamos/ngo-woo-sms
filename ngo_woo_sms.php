@@ -180,9 +180,14 @@ require_once($path . 'wp-load.php');
 
 function get_serial_associated_with_order($order_id)
 {
+    $log = new \Mnotifysms_WooCoommerce_Logger();
+    $log_prefix = 'ngo_sms_log';
+    $log->add($log_prefix,'Inside get_serial_associated_with_order');
+
         $serial = "";
 		$keys = wcsn_order_get_keys( $order_id );
 		if ( empty( $keys )) {
+            $log->add($log_prefix,'all unit the key is empty. I repeat key is empty');
 			return $serial;
 		}
       
@@ -205,7 +210,7 @@ function ngo_woo_get_option($option, $section, $default = '') {
     return $default;
 }
 
-add_action( 'woocommerce_order_status_completed', 'ngo_send_customer_notification', 10, 1);
+add_action( 'woocommerce_order_status_completed', 'ngo_send_customer_notification', PHP_INT_MAX, 1);
 
 
 
